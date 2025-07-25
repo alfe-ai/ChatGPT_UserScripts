@@ -27,29 +27,31 @@
 
   /* ───────── UI injection ───────── */
   function addArchiveAllBtn() {
-    const container = document.querySelector('nav');
-    if (!container) return;
-    if (container.querySelector('#archiveAllBtn')) return;
+    const nav = document.querySelector('nav');
+    if (!nav) return;
+    if (document.querySelector('#archiveAllBtn')) return;
 
     const btn = document.createElement('button');
     btn.id = 'archiveAllBtn';
     btn.textContent = 'Archive All';
     btn.style.cssText = `
-      width: 100%;
+      position:fixed;
+      top:70px;
+      right:20px;
       background:#10a37f;
       color:#fff;
       border:none;
       border-radius:4px;
-      padding:6px 0;
-      margin:6px 0;
+      padding:6px 12px;
       cursor:pointer;
-      font-size:14px;`;
+      font-size:14px;
+      z-index:9999;`;
 
     btn.onclick = async () => {
       if (!confirm('Archive EVERY visible chat?')) return;
       btn.disabled = true; btn.textContent = 'Working…';
 
-      const rows = [...container.querySelectorAll('a[href^="/c/"]')];
+      const rows = [...nav.querySelectorAll('a[href^="/c/"]')];
       let done = 0;
 
       for (const row of rows) {
@@ -87,7 +89,7 @@
       setTimeout(() => { btn.textContent = 'Archive All'; btn.disabled = false; }, 3000);
     };
 
-    container.prepend(btn);
+    document.body.appendChild(btn);
   }
 
   /* ───────── boot ───────── */
