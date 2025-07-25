@@ -27,8 +27,13 @@
 
   /* ───────── UI injection ───────── */
   function addArchiveAllBtn() {
-    const nav = document.querySelector('nav');
-    if (!nav || document.getElementById('archiveAllBtn')) return;
+    if (document.getElementById('archiveAllBtn')) return;
+
+    const firstRow = document.querySelector('a[href^="/c/"]');
+    if (!firstRow) return;
+
+    const container = firstRow.closest('nav,aside,div');
+    if (!container) return;
 
     const btn = document.createElement('button');
     btn.id = 'archiveAllBtn';
@@ -48,7 +53,7 @@
       if (!confirm('Archive EVERY visible chat?')) return;
       btn.disabled = true; btn.textContent = 'Working…';
 
-      const rows = [...document.querySelectorAll('nav a[href^="/c/"]')];
+      const rows = [...container.querySelectorAll('a[href^="/c/"]')];
       let done = 0;
 
       for (const row of rows) {
@@ -86,11 +91,13 @@
       setTimeout(() => { btn.textContent = 'Archive All'; btn.disabled = false; }, 3000);
     };
 
-    nav.prepend(btn);
+    container.prepend(btn);
   }
 
   /* ───────── boot ───────── */
   // sidebar appears after app framework has mounted → watch DOM
   const obs = new MutationObserver(addArchiveAllBtn);
   obs.observe(document.body, { childList: true, subtree: true });
+  // try immediately in case the sidebar is already loaded
+  addArchiveAllBtn();
 })();
