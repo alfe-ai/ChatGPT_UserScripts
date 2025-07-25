@@ -27,13 +27,9 @@
 
   /* ───────── UI injection ───────── */
   function addArchiveAllBtn() {
-    if (document.getElementById('archiveAllBtn')) return;
-
-    const firstRow = document.querySelector('a[href^="/c/"]');
-    if (!firstRow) return;
-
-    const container = firstRow.closest('nav,aside,div');
+    const container = document.querySelector('nav');
     if (!container) return;
+    if (container.querySelector('#archiveAllBtn')) return;
 
     const btn = document.createElement('button');
     btn.id = 'archiveAllBtn';
